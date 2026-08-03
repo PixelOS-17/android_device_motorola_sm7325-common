@@ -40,8 +40,9 @@ PRODUCT_PACKAGES += \
 
 # A/B
 ifeq ($(TARGET_IS_VAB),true)
-# Inherit virtual_ab_ota product
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+# Enable Virtual A/B with userspace snapshots
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
+PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD := none
 endif
 
 AB_OTA_POSTINSTALL_CONFIG += \
