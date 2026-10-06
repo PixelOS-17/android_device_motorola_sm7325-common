@@ -31,6 +31,7 @@ PRODUCT_PACKAGES += \
     FrameworksResCommon \
     FrameworksResProduct \
     FrameworksResTarget \
+    LineageSettingsCommon \
     NcmTetheringOverlay \
     SystemUIResCommon \
     TelephonyResCommon \
@@ -117,6 +118,10 @@ PRODUCT_PACKAGES += \
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm-service.clearkey
+
+# Face unlock
+PRODUCT_PACKAGES += \
+    android.hardware.biometrics.face-service.motorola
 
 # GMS
 ifeq ($(WITH_GMS),true)
