@@ -120,6 +120,8 @@ PRODUCT_PACKAGES += \
     android.hardware.drm-service.clearkey
 
 # Face unlock
+TARGET_PROVIDES_FACE_UNLOCK_HAL := true
+
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.face-service.motorola
 
