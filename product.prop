@@ -5,9 +5,6 @@ audio.sys.mute.latency.factor=2
 audio.sys.routing.latency=0
 audio.sys.offload.pstimeout.secs=3
 
-# eBPF
-ro.bpf.kver_override=5.10.239
-
 # Media
 media.stagefright.audio.deep=false
 
