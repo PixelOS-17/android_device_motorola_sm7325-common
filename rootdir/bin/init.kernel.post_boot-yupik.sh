@@ -164,80 +164,66 @@ echo 30 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
 echo 100 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
 echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/task_thres
 
-# Controls how many more tasks should be eligible to run on gold CPUs
-# w.r.t number of gold CPUs available to trigger assist (max number of
-# tasks eligible to run on previous cluster minus number of CPUs in
-# the previous cluster).
-#
-# Setting to 1 by default which means there should be at least
-# 4 tasks eligible to run on gold cluster (tasks running on gold cores
-# plus misfit tasks on silver cores) to trigger assitance from gold+.
-echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/nr_prev_assist_thresh
-
 # Disable Core control on silver
 echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
 
 # Setting b.L scheduler parameters
-echo 71 95 > /proc/sys/kernel/sched_upmigrate
-echo 65 85 > /proc/sys/kernel/sched_downmigrate
-echo 100 > /proc/sys/kernel/sched_group_upmigrate
-echo 85 > /proc/sys/kernel/sched_group_downmigrate
-echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
+echo 71 95 > /proc/sys/walt/sched_upmigrate
+echo 65 85 > /proc/sys/walt/sched_downmigrate
+echo 100 > /proc/sys/walt/sched_group_upmigrate
+echo 85 > /proc/sys/walt/sched_group_downmigrate
+echo 1 > /proc/sys/walt/sched_walt_rotate_big_tasks
 
 
-echo 0 > /proc/sys/kernel/sched_coloc_busy_hysteresis_enable_cpus
+echo 0 > /proc/sys/walt/sched_coloc_busy_hysteresis_enable_cpus
 
 # cpuset parameters
 echo 0-3 > /dev/cpuset/background/cpus
 echo 0-3 > /dev/cpuset/system-background/cpus
 
 # Turn off scheduler boost at the end
-echo 0 > /proc/sys/kernel/sched_boost
+echo 0 > /proc/sys/walt/sched_boost
 
 # configure governor settings for silver cluster
-echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
-echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
-echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/up_rate_limit_us
-echo 1152000 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
+echo "walt" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+echo 0 > /sys/devices/system/cpu/cpufreq/policy0/walt/down_rate_limit_us
+echo 0 > /sys/devices/system/cpu/cpufreq/policy0/walt/up_rate_limit_us
+echo 1152000 > /sys/devices/system/cpu/cpufreq/policy0/walt/hispeed_freq
 echo 691200 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/pl
+echo 0 > /sys/devices/system/cpu/cpufreq/policy0/walt/pl
 
 # configure input boost settings
-echo "0:1152000" > /sys/devices/system/cpu/cpu_boost/input_boost_freq
-echo 120 > /sys/devices/system/cpu/cpu_boost/input_boost_ms
+echo 1152000 1152000 1152000 1152000 0 0 0 0 > /proc/sys/walt/input_boost/input_boost_freq
+echo 120 > /proc/sys/walt/input_boost/input_boost_ms
 
 # configure governor settings for gold cluster
-echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
-echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/down_rate_limit_us
-echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/up_rate_limit_us
-echo 1228800 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
+echo "walt" > /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
+echo 0 > /sys/devices/system/cpu/cpufreq/policy4/walt/down_rate_limit_us
+echo 0 > /sys/devices/system/cpu/cpufreq/policy4/walt/up_rate_limit_us
+echo 1228800 > /sys/devices/system/cpu/cpufreq/policy4/walt/hispeed_freq
 echo 691200 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
-echo 85 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_load
-echo -6 > /sys/devices/system/cpu/cpu4/sched_load_boost
-echo -6 > /sys/devices/system/cpu/cpu5/sched_load_boost
-echo -6 > /sys/devices/system/cpu/cpu6/sched_load_boost
-echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/rtg_boost_freq
-echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/pl
+echo 85 > /sys/devices/system/cpu/cpufreq/policy4/walt/hispeed_load
+echo 0 > /sys/devices/system/cpu/cpufreq/policy4/walt/rtg_boost_freq
+echo 0 > /sys/devices/system/cpu/cpufreq/policy4/walt/pl
 
 # configure governor settings for gold+ cluster
-echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy7/scaling_governor
-echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/down_rate_limit_us
-echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/up_rate_limit_us
-echo 1324800 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_freq
+echo "walt" > /sys/devices/system/cpu/cpufreq/policy7/scaling_governor
+echo 0 > /sys/devices/system/cpu/cpufreq/policy7/walt/down_rate_limit_us
+echo 0 > /sys/devices/system/cpu/cpufreq/policy7/walt/up_rate_limit_us
+echo 1324800 > /sys/devices/system/cpu/cpufreq/policy7/walt/hispeed_freq
 echo 806400 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
-echo 85 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_load
-echo -6 > /sys/devices/system/cpu/cpu7/sched_load_boost
-echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/rtg_boost_freq
-echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/pl
+echo 85 > /sys/devices/system/cpu/cpufreq/policy7/walt/hispeed_load
+echo 0 > /sys/devices/system/cpu/cpufreq/policy7/walt/rtg_boost_freq
+echo 0 > /sys/devices/system/cpu/cpufreq/policy7/walt/pl
 
 # colocation V3 settings
-echo 691200 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/rtg_boost_freq
-echo 51 > /proc/sys/kernel/sched_min_task_util_for_boost
-echo 35 > /proc/sys/kernel/sched_min_task_util_for_colocation
-echo 20000000 > /proc/sys/kernel/sched_task_unfilter_period
+echo 691200 > /sys/devices/system/cpu/cpufreq/policy0/walt/rtg_boost_freq
+echo 51 > /proc/sys/walt/sched_min_task_util_for_boost
+echo 35 > /proc/sys/walt/sched_min_task_util_for_colocation
+echo 20000000 > /proc/sys/walt/sched_task_unfilter_period
 
 # Enable conservative pl
-echo 1 > /proc/sys/kernel/sched_conservative_pl
+echo 1 > /proc/sys/walt/sched_conservative_pl
 
 # configure RIMPS for L3 DCVS
 for c0_rimps_l3 in /sys/devices/system/cpu/memlat/c0_memlat/cpu0-cpu-l3-lat
