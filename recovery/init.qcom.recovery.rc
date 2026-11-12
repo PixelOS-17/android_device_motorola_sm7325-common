@@ -48,3 +48,17 @@ on property:dev.mnt.blk.firmware=*
 
 on property:init.svc.fastbootd=running
     umount /firmware
+
+# fastbootd and adbd can set sys.usb.ffs.ready before the dwc3 UDC registers,
+# and init.rc writes the UDC only once, so wait for it and bind the gadget here.
+on property:sys.usb.config=fastboot && property:sys.usb.ffs.ready=1 && property:sys.usb.configfs=1
+    wait /sys/class/udc/${sys.usb.controller} 30
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+
+on property:sys.usb.config=adb && property:sys.usb.ffs.ready=1 && property:sys.usb.configfs=1
+    wait /sys/class/udc/${sys.usb.controller} 30
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+
+on property:sys.usb.config=sideload && property:sys.usb.ffs.ready=1 && property:sys.usb.configfs=1
+    wait /sys/class/udc/${sys.usb.controller} 30
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
